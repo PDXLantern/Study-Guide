@@ -33,60 +33,81 @@ bool List::load_file()
 	create_nodes(arr, 0);
 	// TEMP WHILE LOOP
 	std::fstream data_file;
-	std::string from_data;
 	data_file.open("data.txt");
 	if(!data_file)
-		std::cout << "Error: Data File" << std::endl;
-	else
 	{
-		insert(data_file, from_data);
-		data_file.close();
-	}			
+		std::cout << "Error: Data File" << std::endl;
+		return false;
+	}
+	int max_char = 101;
+	int temp_id;
+	char temp_topic[max_char];
+	// exam insert
+	int temp_diff = 0;
+	char temp_unique[max_char];
+	char temp_question[max_char];
 
-	// output for successful init
-	if (arr) { std::cout << "Array of Node Pointers Built" << std::endl;}
-	return true;	
+	data_file >> temp_id;
+	while(!data_file.eof())
+	{
+		// ignore space & ;
+		data_file.ignore(2);
+		// get topic
+		data_file.get(temp_topic, max_char, ';');
+		// ignore
+		data_file.ignore(2);
+		// get difficulty
+		data_file >> temp_diff;
+		// ignore
+		data_file.ignore(2);
+		// get type of question
+		data_file.get(temp_unique, max_char, ';');
+		// ignore
+		data_file.ignore(2);
+		// get question
+		data_file.get(temp_question, max_char, ';');
+		// insert
+		insert(temp_id, temp_topic, temp_diff, temp_unique, temp_question);
+		data_file.ignore(2);
+		data_file >> temp_id;
+	}
+	return true;
 }
 
-bool List::insert(std::string data_string)
+
+bool List::display()
 {
-	if(data_string[0] == '0')
-	{	
-		std::cout << data_string << std::endl;
-		// if head is empty
-		if(!arr[0])
-		{
-			arr[0]->insert(0, data_string);	
-		}
-	}
-	if(data_string[0] == '1')
-		std::cout << data_string << std::endl;
-		if(!arr[1])
-		{
-			arr[1]->insert(1, data_string);
-		}
-	if(data_string[0] == '2')
+	Node * Temp;
+	for(int i = 0; i < size; i++)
 	{
-		std::cout << data_string << std::endl;
-		if(!arr[2])
+		Temp = arr[i];
+		while(Temp)
 		{
-			arr[2]->insert(2, data_string);
+			Temp->display();
+			Temp = Temp->next;
 		}
 	}
 	return true;
 }
 
-bool List::insert(std::fstream& data_file, std::string data_string)
+bool List::insert(int temp_id, char * temp_topic, int temp_diff, char * temp_unique, char * temp_question)
 {
-	//base case
-	if(!data_file)
+	std::cout << "Creating Nodes in Array: " << temp_id  <<  std::endl;
+	Node * Temp = nullptr;
+	Node * Prev = nullptr;
+	Temp = arr[temp_id];
+	while(Temp != nullptr)
 	{
-		return true;
+		Prev = Temp;
+		Temp = Temp->next;
 	}
-	std::getline(data_file, data_string);
-	insert(data_string);
-	return insert(data_file, data_string);
+	Temp = new Node(temp_id, temp_topic, temp_diff, temp_unique, temp_question);
+	Prev->link_next(Temp);
+	Temp->link_prev(Prev);
+	std::cout << "Node Created" <<  std::endl;
+	return true;
 }
+
 // private
 
 // initializes the nodes for the array
@@ -130,7 +151,7 @@ bool List::remove_nodes(Node * current)
 	// set temp node to current
 	Node * temp = current;
 	// set current to next node
-	current = current->go_next();
+	current = current->next;
 	// delete temp node
 	delete temp;
 	// go to next node and delete

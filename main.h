@@ -4,7 +4,7 @@
 // prepare for exams, programming problems, and plan out concepts to explore in the future.
 
 #include <iostream>
+#include "topic.h"
 #include "list.h"
-
 int main();
 
