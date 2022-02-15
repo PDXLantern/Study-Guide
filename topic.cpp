@@ -6,17 +6,19 @@ Topic::Topic()
 {
 	id = 0;
 	topic = nullptr;
+	difficulty = 0;
 }
 // topic contructor w args
-Topic::Topic(const int from_id, const char * from_topic) : Topic()
+Topic::Topic(const int temp_id, const char * temp_topic, const int temp_diff) : Topic()
 {
-	this->id = from_id;
+	this->id = temp_id;
 	if(this->topic)
 	{
 		delete topic;
 	}
-	this->topic = new char [strlen(from_topic)+1];
-	strcpy(this->topic, from_topic);
+	this->topic = new char [strlen(temp_topic)+1];
+	strcpy(this->topic, temp_topic);
+	this->difficulty = temp_diff;
 }
 // topic destructor
 Topic::~Topic()
@@ -30,33 +32,29 @@ bool Topic::display() const
 {
 	std::cout << "ID: " << id << std::endl;
 	std::cout << "Topic: " << topic << std::endl;
+	std::cout << "Difficulty Level: " << difficulty << std::endl;
 	return true;
 }
 // class Exam
 // exam constructor
 Exam::Exam()
 {
-	difficulty = 0;
 	type = nullptr;
 	question = nullptr;
 }
 // exam constructor w args
-Exam::Exam(int temp_id, char * temp_topic, int temp_diff, char * temp_unique, char * temp_question): Topic(temp_id, temp_topic)
+Exam::Exam(int temp_id, char * temp_topic, int temp_diff, char * temp_unique, char * temp_question): Topic(temp_id, temp_topic, temp_diff)
 {
-	this->difficulty = 0;
-	this->difficulty = temp_diff;
 	this->type = nullptr;
 	this->type = new char [strlen(temp_unique)+1];
 	strcpy(this->type, temp_unique);
 	this->question = nullptr;
 	this->question = new char [strlen(temp_question)+1];
 	strcpy(this->question, temp_question);
-
 }
 // exam destructor
 Exam::~Exam()
 {
-	difficulty = 0;
 	if(this->type)
 	{
 		delete [] type;
@@ -66,97 +64,156 @@ Exam::~Exam()
 		delete [] question;
 	}
 }
-// exam change function
-bool Exam::change()
+// exam edit 
+bool Exam::edit(const char * temp_unique, const char * temp_question)
 {
+	// delete old data
+	if(this->type)
+	{
+		delete [] type;
+	}
+	// create new data
+	this->type = new char [strlen(temp_unique)+1];
+	strcpy(this->type, temp_unique);
+	// delete old question data
+	if(this->question)
+	{
+		delete [] question;
+	}
+	// create new question data
+	this->question = new char [strlen(temp_question)+1];
+	strcpy(this->question, temp_question);
 	return true;
 }
+// exam answer
+bool Exam::answer()
+{
+	return true;	
+}
 
+// exam display 
 bool Exam::display() const
 {
 	Topic::display();
-	std::cout << "Difficulty Level: " << difficulty << std::endl;
-	std::cout << type << std::endl;
+	std::cout << "Type: " << type << std::endl;
 	std::cout << "Question: "<< question << std::endl;
 	return true;
 }
-/*
+
 // class Problems
 Problems::Problems()
 {
-	difficulty = 0;
 	prototype = nullptr;
 	question = nullptr;
 }
+// problems constructor w args
+Problems::Problems(int temp_id, char * temp_topic, int temp_diff, char * temp_unique, char * temp_question): Topic(temp_id, temp_topic, temp_diff)
+{
+	prototype = new std::string(temp_unique);
+	question = new std::string(temp_question);
+}
 
+// problem destructor
 Problems::~Problems()
 {
 	
-	difficulty = 0;
-	prototype = nullptr;
-	question = nullptr;
+	if (prototype)
+		delete prototype;
+	if (question)
+		delete question;
 }
-bool Problems::change()
+// problems edit 
+bool Problems::edit(const char * temp_unique, const char * temp_question)
+{
+	// delete old data
+	if(this->prototype)
+	{
+		delete [] prototype;
+	}
+	// create new data
+	prototype = new std::string(temp_unique);
+	// delete old question data
+	if(this->question)
+	{
+		delete [] question;
+	}
+	// create new question data
+	question = new std::string(temp_question);
+	return true;
+}
+// problems answer
+bool Problems::answer()
 {
 	return true;
 }
-
+// problem display
 bool Problems::display() const
 {
 	Topic::display();
-	std::cout << "Difficulty Level: " << difficulty << std::endl;
-	std::cout << "Protoype: " << prototype << std::endl;
-	std::cout << "Question: " << std::endl;
+	std::cout << "Protoype: " << *prototype << std::endl;
+	std::cout << "Question: " << *question << std::endl;
 	return true;
-}
-
-// Problems constructor w args
-Problems::Problems(const int from_id, const char * from_topic, const int from_difficulty, const char * from_type, const char * from_question) : Topic(from_id, from_topic)
-{
-	this->difficulty = from_difficulty;
-	this->prototype.push_back(*from_topic);
-	this->question.push_back(*from_question);
-	this->display();
 }
 
 // class Future
 Future::Future()
 {
-	difficulty = 0;
 	month = nullptr;
 	subject = nullptr;
 }
 
+// future constructor w args
+Future::Future(int temp_id, char * temp_topic, int temp_diff, char * temp_unique, char * temp_question): Topic(temp_id, temp_topic, temp_diff)
+{	
+	month = nullptr;
+	if(month)
+		delete [] temp_unique;
+	this->month = new char [strlen(temp_unique)+1];
+	strcpy(this->month, temp_unique);
+	this->subject = new std::string(temp_question);
+}
+// future destructor
 Future::~Future()
 {
 	if(month)
-		delete month;
+		delete[] month;
+	if(subject)
+		delete subject;
 }
-bool Future::change()
+// future edit
+bool Future::edit(const char * temp_unique, const char * temp_question)
+{
+	// delete old data
+	if(this->month)
+	{
+		delete [] month;
+	}
+	// create new data
+	this->month = new char [strlen(temp_unique)+1];
+	strcpy(this->month, temp_unique);
+	// delete old subject data
+	if(this->subject)
+	{
+		delete [] subject;
+	}
+	// create new question data
+	subject = new std::string(temp_question);
+	return true;
+}
+// future answer
+bool Future::answer()
 {
 	return true;
 }
-
+// future display 
 bool Future::display() const
 {
 	Topic::display();
-	std::cout << "Difficulty Level: " << difficulty << std::endl;
 	std::cout << "Month: " << month << std::endl;
-	std::cout << "Subject" << subject << std::endl;
+	std::cout << "Subject: " << *subject << std::endl;
 	return true;
 }
 
-Future::Future(const int from_id, const char * from_topic, const int from_difficulty, const char * from_type, const char * from_question) : Topic(from_id, from_topic)
-{
-	this->difficulty = from_difficulty;
-	if(month)
-		delete month;
-	month = new char [strlen(from_type)+1];
-	strcpy(this->month, from_type);
-	this->subject.push_back(*from_question);
-	this->display();
-}
-*/
 // class Node
 // node constructor()
 Node::Node()
@@ -221,8 +278,29 @@ bool Node::display() const
 // node insert function
 bool Node::insert(int temp_id, char * temp_topic, int temp_diff, char * temp_unique, char * temp_question)
 {
-	std::cout << "Node Inset" << std::endl;
-	Exam * Test = new Exam(temp_id, temp_topic, temp_diff, temp_unique, temp_question);
-	data = Test;
-	return true;
+	// if temp_id 0 create exam object
+	if(temp_id <= 4)
+	{
+		std::cout << "Node Inset" << std::endl;
+		Exam * Test = new Exam(temp_id, temp_topic, temp_diff, temp_unique, temp_question);
+		data = Test;
+		return true;
+	}
+	// if temp_id 1 create problems object
+	if(temp_id >= 5 && temp_id <= 8)
+	{	
+		std::cout << "Node Inset" << std::endl;
+		Problems * Test = new Problems(temp_id, temp_topic, temp_diff, temp_unique, temp_question);
+		data = Test;
+		return true;
+	}	
+	// if temp_id 2 create future object
+	if(temp_id >= 9)
+	{
+		std::cout << "Node Inset" << std::endl;
+		Future * Test = new Future(temp_id, temp_topic, temp_diff, temp_unique, temp_question);
+		data = Test;
+		return true;
+	}
+	return false;
 }

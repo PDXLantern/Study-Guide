@@ -13,21 +13,22 @@ class Topic
 		// contructor
 		Topic();
 		// constructor w/ arg
-		Topic(const int from_id, const char * from_topic);
-		// destructor
+		Topic(const int temp_id, const char * temp_topic, const int temp_diff);
+		// virtual destructor
 		virtual ~Topic();
 		// virtual base functions
-		bool change();
-		bool answer();
-		int rate();
-		// base functions
+		virtual bool edit(const char * temp_unique, const char * temp_question) = 0;
+		virtual bool answer() = 0;
+		// int rate();
+		// change id number
 		bool change_id(const int from_id);
-		bool display() const;
+		// virtual display
+		virtual bool display() const;
 	protected:
 		// data members
 		int id;
 		char * topic;
-
+		int difficulty;
 };
 
 class Exam : public Topic
@@ -35,41 +36,38 @@ class Exam : public Topic
 	public:
 		// constructor
 		Exam();
+		// constructor w arg
 		Exam(int temp_id, char * temp_topic, int temp_diff, char * temp_unique, char * temp_question);
 		// destructor
 		virtual ~Exam();
-		// functions
-		bool change();
-		bool answer();
-		int rate();
-		bool display() const;
+		virtual bool edit(const char * temp_unique, const char * temp_question);
+		virtual bool answer();
+		// int rate();
+		// virtual display
+		virtual bool display() const;
 	protected:
-		int difficulty;
 		char * type;
 		char * question;
 };
-/*
+
 class Problems : public Topic
 {
 	public:
 		// constructor
 		Problems();
 		// constructor w/ arg
-		
-		Problems(const int from_id, const char * from_topic, const int from_difficulty, const char * from_type, const char * from_question);
+		Problems(int temp_id, char * temp_topic, int temp_diff, char * temp_unique, char * temp_question);
 		// destructor
 		~Problems();
-		// functions
-		bool change();
-		bool answer();
-		int rate();
-		bool display() const;
+		virtual bool edit(const char * temp_unique, const char * temp_question);
+		virtual bool answer();
+		// int rate();
+		virtual bool display() const;
 		// unqiue function
-		bool easy();
+		// bool easy();
 	protected:
-		int difficulty;
-		std::string prototype;
-		std::string question;
+		std::string * prototype;
+		std::string * question;
 
 };
 
@@ -79,22 +77,21 @@ class Future : public Topic
 		// constructor
 		Future();
 		// constructor w/ arg
-		Future(const int from_id, const char * from_topic, const int from_difficulty, const char * from_type, const char * from_question);
+		Future(int temp_id, char * temp_topic, int temp_diff, char * temp_unique, char * temp_question);
 		// destructor
 		~Future();
 		// functions
-		bool change();
-		bool answer();
-		int rate();
-		bool display() const;
+		virtual bool edit(const char * temp_unique, const char * temp_question);
+		virtual bool answer();
+		//int rate();
+		virtual bool display() const;
 		// unqiue function
 		bool change_month();
 	protected:
-		int difficulty;
 		char * month;
-		std::string subject;
+		std::string * subject;
 };
-*/
+
 class Node 
 {
 	public:
@@ -109,16 +106,18 @@ class Node
 		Node * go_prev();
 		// traverse next
 		Node * go_next();
+		// link node to next
 		bool link_next(Node * current);
+		// link node to prev
 		bool link_prev(Node * current);
-		// insert data	
+		// insert data
 		bool insert(int temp_id, char * temp_topic, int temp_diff, char * temp_unique, char * temp_question);
 		// check if node is empty
 		bool empty();
 		// remove node
-		bool remove();
+		// bool remove();
 		// search for node
-		bool search();
+		// bool search();
 		// displayy all nodes
 		bool display() const;
 		// prev

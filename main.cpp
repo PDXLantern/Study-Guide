@@ -6,6 +6,6 @@
 int main()
 {
 	List active_list;
-	active_list.display();
+//	active_list.command(1);
 	return 0;
 }

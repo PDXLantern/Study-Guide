@@ -73,8 +73,26 @@ bool List::load_file()
 	}
 	return true;
 }
-
-
+bool List::command(const int user_input)
+{
+	switch(user_input)
+	{
+		// display list
+		case 0:
+		{
+			// call display
+			this->display();
+			return true;
+		}
+		// edit list
+		case 1:
+		{
+			// call edit
+			return true;
+		}
+	}
+	return false;	
+}
 bool List::display()
 {
 	Node * Temp;
@@ -90,12 +108,27 @@ bool List::display()
 	return true;
 }
 
+bool List::edit()
+{
+	char * user_unique;
+	char * user_string;
+	int user_id;
+	
+	std::cout << "Enter the Question ID to Edit: " << std::endl;
+	std::cin >> user_id;
+}
+
 bool List::insert(int temp_id, char * temp_topic, int temp_diff, char * temp_unique, char * temp_question)
 {
-	std::cout << "Creating Nodes in Array: " << temp_id  <<  std::endl;
+	int i = 0;
+	if(temp_id >= 5 && temp_id <= 8)
+		i = 1;
+	if(temp_id >= 9)
+		i = 2;
+//	std::cout << "Creating Nodes in Array: " << i  <<  std::endl;
 	Node * Temp = nullptr;
 	Node * Prev = nullptr;
-	Temp = arr[temp_id];
+	Temp = arr[i];
 	while(Temp != nullptr)
 	{
 		Prev = Temp;
