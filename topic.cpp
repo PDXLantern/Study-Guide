@@ -27,6 +27,13 @@ Topic::~Topic()
 		delete [] topic;
 	this->id = 0;
 }
+// topic check id
+bool Topic::check_id(const int match)
+{
+	if(id == match)
+		return true;
+	return false;
+}
 // topic display
 bool Topic::display() const
 {
@@ -41,6 +48,7 @@ Exam::Exam()
 {
 	type = nullptr;
 	question = nullptr;
+//	answer = nullptr;
 }
 // exam constructor w args
 Exam::Exam(int temp_id, char * temp_topic, int temp_diff, char * temp_unique, char * temp_question): Topic(temp_id, temp_topic, temp_diff)
@@ -85,24 +93,32 @@ bool Exam::edit(const char * temp_unique, const char * temp_question)
 	strcpy(this->question, temp_question);
 	return true;
 }
+/*
 // exam answer
-bool Exam::answer()
+bool Exam::answer(const char * answer)
 {
-	return true;	
+	if(this->answer)
+		delete [] this->answer;
+	this->answer = new char [strlen(answer)+1];
+	strcpy(this->answer, answer);
+	return true;
 }
-
+*/
 // exam display 
 bool Exam::display() const
 {
 	Topic::display();
 	std::cout << "Type: " << type << std::endl;
 	std::cout << "Question: "<< question << std::endl;
+//	if(answer)
+//		std::cout << "Answer: " << answer << std::endl;
 	return true;
 }
 
 // class Problems
 Problems::Problems()
 {
+//	answer = nullptr;
 	prototype = nullptr;
 	question = nullptr;
 }
@@ -115,12 +131,13 @@ Problems::Problems(int temp_id, char * temp_topic, int temp_diff, char * temp_un
 
 // problem destructor
 Problems::~Problems()
-{
-	
+{	
 	if (prototype)
 		delete prototype;
 	if (question)
 		delete question;
+//	if (answer)
+//		delete answer;
 }
 // problems edit 
 bool Problems::edit(const char * temp_unique, const char * temp_question)
@@ -141,11 +158,17 @@ bool Problems::edit(const char * temp_unique, const char * temp_question)
 	question = new std::string(temp_question);
 	return true;
 }
+/*
 // problems answer
-bool Problems::answer()
+bool Problems::answer(const char * answer)
 {
+	if(this->answer)
+		delete [] this->answer;
+	this->answer = new char [strlen(answer)+1];
+	strcpy(this->answer, answer);
 	return true;
 }
+*/
 // problem display
 bool Problems::display() const
 {
@@ -158,6 +181,7 @@ bool Problems::display() const
 // class Future
 Future::Future()
 {
+//	answer = nullptr;
 	month = nullptr;
 	subject = nullptr;
 }
@@ -179,6 +203,8 @@ Future::~Future()
 		delete[] month;
 	if(subject)
 		delete subject;
+//	if(answer)
+//		delete answer;
 }
 // future edit
 bool Future::edit(const char * temp_unique, const char * temp_question)
@@ -201,11 +227,17 @@ bool Future::edit(const char * temp_unique, const char * temp_question)
 	return true;
 }
 // future answer
-bool Future::answer()
+/*
+bool Future::answer(const char * answer)
 {
+	if(this->answer)
+		delete [] this->answer;
+	this->answer = new char [strlen(answer)+1];
+	strcpy(this->answer, answer);
 	return true;
 }
-// future display 
+*/
+// future display
 bool Future::display() const
 {
 	Topic::display();
@@ -260,12 +292,38 @@ bool Node::link_next(Node * current)
 	this->next = current;
 	return true;
 }
-// node empty function
+// node edit
+bool Node::edit(const char * temp_unique, const char * temp_question)
+{
+	if(data)
+	{
+		data->edit(temp_unique, temp_question);
+		return true;
+	}
+	return false;
+}
+// node answer
+bool Node::answer(const char * temp_answer)
+{
+	if(data)
+	{
+		data->answer(temp_answer);
+	}
+	return false;
+}
+// node empty
 bool Node::empty()
 {
 	if(data)
 		return false;
 	return true;
+}
+// node search
+bool Node::search(const int match)
+{
+	if(data->check_id(match) == true)
+		return true;
+	return false;
 }
 // node display
 bool Node::display() const
@@ -281,7 +339,6 @@ bool Node::insert(int temp_id, char * temp_topic, int temp_diff, char * temp_uni
 	// if temp_id 0 create exam object
 	if(temp_id <= 4)
 	{
-		std::cout << "Node Inset" << std::endl;
 		Exam * Test = new Exam(temp_id, temp_topic, temp_diff, temp_unique, temp_question);
 		data = Test;
 		return true;
@@ -289,7 +346,6 @@ bool Node::insert(int temp_id, char * temp_topic, int temp_diff, char * temp_uni
 	// if temp_id 1 create problems object
 	if(temp_id >= 5 && temp_id <= 8)
 	{	
-		std::cout << "Node Inset" << std::endl;
 		Problems * Test = new Problems(temp_id, temp_topic, temp_diff, temp_unique, temp_question);
 		data = Test;
 		return true;
@@ -297,7 +353,6 @@ bool Node::insert(int temp_id, char * temp_topic, int temp_diff, char * temp_uni
 	// if temp_id 2 create future object
 	if(temp_id >= 9)
 	{
-		std::cout << "Node Inset" << std::endl;
 		Future * Test = new Future(temp_id, temp_topic, temp_diff, temp_unique, temp_question);
 		data = Test;
 		return true;

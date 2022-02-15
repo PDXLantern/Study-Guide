@@ -88,6 +88,13 @@ bool List::command(const int user_input)
 		case 1:
 		{
 			// call edit
+			this->edit();
+			return true;
+		}
+		case 2:
+		{
+			// call answer
+			this->answer();
 			return true;
 		}
 	}
@@ -108,14 +115,81 @@ bool List::display()
 	return true;
 }
 
+bool List::display(const int user_input)
+{
+	Node * Temp;
+	Temp = search(nullptr, 0, user_input);
+	if(Temp)
+	{
+		Temp->display();
+		return true;
+	}
+	return false;
+}
+// edit function
 bool List::edit()
 {
-	char * user_unique;
-	char * user_string;
+	char temp_unique[101];
+	char temp_question[101];
 	int user_id;
-	
+	// enter id and search for id
 	std::cout << "Enter the Question ID to Edit: " << std::endl;
 	std::cin >> user_id;
+	// display old data
+	std::cout << "Current Question: " << std::endl;
+	display(user_id);
+	// get new data
+	std::cout << "Please Enter the New Subject: " << std::endl;
+	std::cin.ignore();
+	std::cin.getline(temp_unique, 101, '\n');
+	// get new data
+	std::cout << "Please Enter the New Question: " << std::endl;
+	std::cin.getline(temp_question, 101, '\n');	
+	std::cout << std::endl;
+	std::cout << temp_unique << std::endl;
+	std::cout << temp_question << std::endl;
+	// send data to node
+	Node * Temp = search(nullptr, 0, user_id);
+	Temp->edit(temp_unique, temp_question);
+	return true;
+}
+// rate function
+bool List::answer()
+{
+	// temp vars
+	int temp_id;
+	char temp_answer[101];
+	// get id from user
+	std::cout << "Enter the Question ID to Edit: " << std::endl;
+	std::cin >> temp_id;
+	std::cin.ignore();
+	// display old ata
+	std::cout << "Current Question: " << std::endl;
+	display(temp_id);
+	// get new data
+	std::cout << "Please Enter your Answer: " << std::endl;
+	std::cin.getline(temp_answer, 101, '\n');
+	// send data to node
+	Node * Temp = search(nullptr, 0, temp_id);
+	Temp->answer(temp_answer);
+	return true;
+}
+
+Node * List::search(Node * current, int arr_number, const int match)
+{
+	if(match < 0 || match > 16) return nullptr;
+	if(arr_number == 3)
+		return nullptr;
+	if(current == nullptr)
+	{
+		current = arr[arr_number];
+		arr_number++;
+	}
+	if(current->search(match) == true)
+	{
+		return current;
+	}
+	return search(current->next, arr_number, match);
 }
 
 bool List::insert(int temp_id, char * temp_topic, int temp_diff, char * temp_unique, char * temp_question)
@@ -129,15 +203,19 @@ bool List::insert(int temp_id, char * temp_topic, int temp_diff, char * temp_uni
 	Node * Temp = nullptr;
 	Node * Prev = nullptr;
 	Temp = arr[i];
-	while(Temp != nullptr)
+	if(!arr[i]->empty())
 	{
-		Prev = Temp;
-		Temp = Temp->next;
+		while(Temp != nullptr)
+		{
+			Prev = Temp;
+			Temp = Temp->next;
+		}
+		Temp = new Node(temp_id, temp_topic, temp_diff, temp_unique, temp_question);
+		Prev->link_next(Temp);
+		Temp->link_prev(Prev);
+		return true;
 	}
-	Temp = new Node(temp_id, temp_topic, temp_diff, temp_unique, temp_question);
-	Prev->link_next(Temp);
-	Temp->link_prev(Prev);
-	std::cout << "Node Created" <<  std::endl;
+	Temp->insert(temp_id, temp_topic, temp_diff, temp_unique, temp_question);
 	return true;
 }
 

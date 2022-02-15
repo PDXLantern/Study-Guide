@@ -18,8 +18,8 @@ class Topic
 		virtual ~Topic();
 		// virtual base functions
 		virtual bool edit(const char * temp_unique, const char * temp_question) = 0;
-		virtual bool answer() = 0;
-		// int rate();
+		virtual bool answer(const char * temp_answer) = 0;
+		bool check_id(const int match);
 		// change id number
 		bool change_id(const int from_id);
 		// virtual display
@@ -41,13 +41,13 @@ class Exam : public Topic
 		// destructor
 		virtual ~Exam();
 		virtual bool edit(const char * temp_unique, const char * temp_question);
-		virtual bool answer();
-		// int rate();
+		virtual bool answer(const char * temp_answer);
 		// virtual display
 		virtual bool display() const;
 	protected:
 		char * type;
 		char * question;
+//		char * answer;
 };
 
 class Problems : public Topic
@@ -60,15 +60,14 @@ class Problems : public Topic
 		// destructor
 		~Problems();
 		virtual bool edit(const char * temp_unique, const char * temp_question);
-		virtual bool answer();
-		// int rate();
+		virtual bool answer(const char * temp_answer);
 		virtual bool display() const;
 		// unqiue function
 		// bool easy();
 	protected:
 		std::string * prototype;
 		std::string * question;
-
+//		char * answer;
 };
 
 class Future : public Topic
@@ -82,14 +81,14 @@ class Future : public Topic
 		~Future();
 		// functions
 		virtual bool edit(const char * temp_unique, const char * temp_question);
-		virtual bool answer();
-		//int rate();
+		virtual bool answer(const char * temp_answer);
 		virtual bool display() const;
 		// unqiue function
 		bool change_month();
 	protected:
 		char * month;
 		std::string * subject;
+//		char * answer;
 };
 
 class Node 
@@ -112,19 +111,20 @@ class Node
 		bool link_prev(Node * current);
 		// insert data
 		bool insert(int temp_id, char * temp_topic, int temp_diff, char * temp_unique, char * temp_question);
+		// edit
+		bool edit(const char * temp_unique, const char * temp_question);
+		// rate
+		bool answer(const char * temp_answer);
 		// check if node is empty
 		bool empty();
-		// remove node
-		// bool remove();
-		// search for node
-		// bool search();
+		// search id
+		bool search(const int match);
 		// displayy all nodes
 		bool display() const;
 		// prev
 		Node * prev;
 		Node * next;
 	protected:
-		
 		// object data
 		Topic * data;
 };

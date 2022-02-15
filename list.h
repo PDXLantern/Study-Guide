@@ -22,8 +22,13 @@ class List
 		bool remove();
 		// display 
 		bool display();
+		bool display(const int user_input);
 		// edit
 		bool edit();
+		// answer
+		bool answer();
+		// search
+		Node * search(Node * current, int arr_number, const int match);
 		// insert
 		bool insert(int temp_id, char * temp_topic, int temp_diff, char * temp_unique, char * temp_question);
 	private:
