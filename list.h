@@ -27,6 +27,8 @@ class List
 		bool edit();
 		// answer
 		bool answer();
+		// pratice
+		bool practice();
 		// search
 		Node * search(Node * current, int arr_number, const int match);
 		// insert

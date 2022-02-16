@@ -97,6 +97,12 @@ bool List::command(const int user_input)
 			this->answer();
 			return true;
 		}
+		case 3:
+		{
+			// call pratice
+			this->practice();
+			return true;
+		}
 	}
 	return false;	
 }
@@ -109,6 +115,7 @@ bool List::display()
 		while(Temp)
 		{
 			Temp->display();
+			std::cout << std::endl;
 			Temp = Temp->next;
 		}
 	}
@@ -132,12 +139,28 @@ bool List::edit()
 	char temp_unique[101];
 	char temp_question[101];
 	int user_id;
+	bool display_flag = false;
 	// enter id and search for id
 	std::cout << "Enter the Question ID to Edit: " << std::endl;
 	std::cin >> user_id;
 	// display old data
 	std::cout << "Current Question: " << std::endl;
-	display(user_id);
+	std::cout << std::endl;
+	try {
+		display_flag = display(user_id);
+		if(display_flag == false)
+			throw display_flag;
+	}
+	catch (bool display)
+	{
+		std::cout << "Error: Invalid Question ID" << std::endl;
+		return false;
+	}
+	catch(...)
+	{
+		std::cin.ignore();
+		std::cout << "Error: Invalid Input" << std::endl;
+	}
 	// get new data
 	std::cout << "Please Enter the New Subject: " << std::endl;
 	std::cin.ignore();
@@ -160,11 +183,12 @@ bool List::answer()
 	int temp_id;
 	char temp_answer[101];
 	// get id from user
-	std::cout << "Enter the Question ID to Edit: " << std::endl;
+	std::cout << "Enter the Question ID to Answer: " << std::endl;
 	std::cin >> temp_id;
 	std::cin.ignore();
 	// display old ata
 	std::cout << "Current Question: " << std::endl;
+	std::cout << std::endl;
 	display(temp_id);
 	// get new data
 	std::cout << "Please Enter your Answer: " << std::endl;
@@ -172,6 +196,23 @@ bool List::answer()
 	// send data to node
 	Node * Temp = search(nullptr, 0, temp_id);
 	Temp->answer(temp_answer);
+	return true;
+}
+
+bool List::practice()
+{
+	// temp vars
+	int temp_id;
+	// get id from user
+	std::cout << "Enter the Question ID that needs more practice: " << std::endl;
+	std::cin >> temp_id;
+	// display data
+	display(temp_id);
+	// send data to node
+	Node * Temp = search(nullptr, 0, temp_id);
+	Temp->practice();
+	std::cout << std::endl;
+	display(temp_id);
 	return true;
 }
 

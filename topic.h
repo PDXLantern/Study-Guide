@@ -19,7 +19,7 @@ class Topic
 		// virtual base functions
 		virtual bool edit(const char * temp_unique, const char * temp_question) = 0;
 		virtual bool answer(const char * temp_answer) = 0;
-		virtual bool practice() = 0;
+		virtual bool practice();
 		bool check_id(const int match);
 		// change id number
 		bool change_id(const int from_id);
@@ -32,6 +32,7 @@ class Topic
 		char * topic;
 		// var for the difficulty
 		int difficulty;
+		bool saved_practice;
 };
 
 class Exam : public Topic
@@ -141,6 +142,8 @@ class Node
 		bool empty();
 		// search id
 		bool search(const int match);
+		// pratice
+		bool practice();
 		// displayy all nodes
 		bool display() const;
 		// prev

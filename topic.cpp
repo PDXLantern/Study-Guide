@@ -7,6 +7,7 @@ Topic::Topic()
 	id = 0;
 	topic = nullptr;
 	difficulty = 0;
+	saved_practice = false;
 }
 // topic contructor w args
 Topic::Topic(const int temp_id, const char * temp_topic, const int temp_diff) : Topic()
@@ -19,6 +20,7 @@ Topic::Topic(const int temp_id, const char * temp_topic, const int temp_diff) : 
 	this->topic = new char [strlen(temp_topic)+1];
 	strcpy(this->topic, temp_topic);
 	this->difficulty = temp_diff;
+	saved_practice = false;
 }
 // topic destructor
 Topic::~Topic()
@@ -26,6 +28,18 @@ Topic::~Topic()
 	if(topic)
 		delete [] topic;
 	this->id = 0;
+	saved_practice = false;
+}
+// topic
+bool Topic::practice()
+{
+	if(saved_practice == false)
+	{
+		saved_practice = true;
+		return true;
+	}
+	saved_practice = false;
+	return false;
 }
 // topic check id
 bool Topic::check_id(const int match)
@@ -109,6 +123,12 @@ bool Exam::answer(const char * answer)
 	return true;
 }
 
+// exam practice
+bool Exam::practice()
+{
+	return Topic::practice();
+}
+
 // exam display 
 bool Exam::display() const
 {
@@ -117,6 +137,8 @@ bool Exam::display() const
 	std::cout << "Question: "<< question << std::endl;
 	if(saved_answer)
 		std::cout << "Answer: " << saved_answer << std::endl;
+	if(saved_practice == true)
+		std::cout << "Needs More Pratice!" << std::endl;
 	return true;
 }
 
@@ -181,6 +203,12 @@ bool Problems::answer(const char * answer)
 	return true;
 }
 
+// problems practice
+bool Problems::practice()
+{
+	return Topic::practice();
+}
+
 // problem display
 bool Problems::display() const
 {
@@ -189,6 +217,8 @@ bool Problems::display() const
 	std::cout << "Question: " << *question << std::endl;
 	if(saved_answer != NULL)
 		std::cout << "Answer: " << saved_answer << std::endl;
+	if(saved_practice == true)
+		std::cout << "Needs More Pratice!" << std::endl;
 	return true;
 }
 
@@ -243,7 +273,6 @@ bool Future::edit(const char * temp_unique, const char * temp_question)
 	return true;
 }
 // future answer
-
 bool Future::answer(const char * answer)
 {
 	if(this->saved_answer)
@@ -251,6 +280,11 @@ bool Future::answer(const char * answer)
 	this->saved_answer = new char [strlen(answer)+1];
 	strcpy(this->saved_answer, answer);
 	return true;
+}
+// future practice
+bool Future::practice()
+{
+	return Topic::practice();
 }
 
 // future display
@@ -261,6 +295,8 @@ bool Future::display() const
 	std::cout << "Subject: " << *subject << std::endl;
 	if(saved_answer != NULL)
 		std::cout << "Answer: " << saved_answer << std::endl;
+	if(saved_practice == true)
+		std::cout << "Needs More Pratice!" << std::endl;
 	return true;
 }
 
@@ -342,6 +378,10 @@ bool Node::search(const int match)
 	if(data->check_id(match) == true)
 		return true;
 	return false;
+}
+bool Node::practice()
+{
+	return data->practice();
 }
 // node display
 bool Node::display() const
