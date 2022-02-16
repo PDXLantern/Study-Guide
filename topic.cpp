@@ -48,7 +48,7 @@ Exam::Exam()
 {
 	type = nullptr;
 	question = nullptr;
-//	answer = nullptr;
+	saved_answer = nullptr;
 }
 // exam constructor w args
 Exam::Exam(int temp_id, char * temp_topic, int temp_diff, char * temp_unique, char * temp_question): Topic(temp_id, temp_topic, temp_diff)
@@ -59,6 +59,7 @@ Exam::Exam(int temp_id, char * temp_topic, int temp_diff, char * temp_unique, ch
 	this->question = nullptr;
 	this->question = new char [strlen(temp_question)+1];
 	strcpy(this->question, temp_question);
+	this->saved_answer = nullptr;
 }
 // exam destructor
 Exam::~Exam()
@@ -71,9 +72,13 @@ Exam::~Exam()
 	{
 		delete [] question;
 	}
+	if(this->saved_answer)
+	{
+		delete [] saved_answer;
+	}
 }
 // exam edit 
-bool Exam::edit(const char * temp_unique, const char * temp_question)
+bool Exam::edit(const char * temp_unique, const char * temp_question) 
 {
 	// delete old data
 	if(this->type)
@@ -93,40 +98,47 @@ bool Exam::edit(const char * temp_unique, const char * temp_question)
 	strcpy(this->question, temp_question);
 	return true;
 }
-/*
+
 // exam answer
 bool Exam::answer(const char * answer)
 {
-	if(this->answer)
-		delete [] this->answer;
-	this->answer = new char [strlen(answer)+1];
-	strcpy(this->answer, answer);
+	if(this->saved_answer)
+		delete [] this->saved_answer;
+	this->saved_answer = new char [strlen(answer)+1];
+	strcpy(this->saved_answer, answer);
 	return true;
 }
-*/
+
 // exam display 
 bool Exam::display() const
 {
 	Topic::display();
 	std::cout << "Type: " << type << std::endl;
 	std::cout << "Question: "<< question << std::endl;
-//	if(answer)
-//		std::cout << "Answer: " << answer << std::endl;
+	if(saved_answer)
+		std::cout << "Answer: " << saved_answer << std::endl;
 	return true;
 }
 
 // class Problems
 Problems::Problems()
 {
-//	answer = nullptr;
+	saved_answer = nullptr;
 	prototype = nullptr;
 	question = nullptr;
 }
 // problems constructor w args
 Problems::Problems(int temp_id, char * temp_topic, int temp_diff, char * temp_unique, char * temp_question): Topic(temp_id, temp_topic, temp_diff)
 {
-	prototype = new std::string(temp_unique);
-	question = new std::string(temp_question);
+	prototype = nullptr;
+	question = nullptr;
+	if(prototype)
+		delete prototype;
+	this->prototype = new std::string(temp_unique);
+	if(question)
+		delete question;
+	this->question = new std::string(temp_question);
+	saved_answer = nullptr;
 }
 
 // problem destructor
@@ -136,8 +148,8 @@ Problems::~Problems()
 		delete prototype;
 	if (question)
 		delete question;
-//	if (answer)
-//		delete answer;
+	if (saved_answer)
+		delete saved_answer;
 }
 // problems edit 
 bool Problems::edit(const char * temp_unique, const char * temp_question)
@@ -145,43 +157,45 @@ bool Problems::edit(const char * temp_unique, const char * temp_question)
 	// delete old data
 	if(this->prototype)
 	{
-		delete [] prototype;
+		delete prototype;
 	}
 	// create new data
-	prototype = new std::string(temp_unique);
+	this->prototype = new std::string(temp_unique);
 	// delete old question data
 	if(this->question)
 	{
-		delete [] question;
+		delete question;
 	}
 	// create new question data
-	question = new std::string(temp_question);
+	this->question = new std::string(temp_question);
 	return true;
 }
-/*
+
 // problems answer
 bool Problems::answer(const char * answer)
 {
-	if(this->answer)
-		delete [] this->answer;
-	this->answer = new char [strlen(answer)+1];
-	strcpy(this->answer, answer);
+	if(this->saved_answer)
+		delete [] this->saved_answer;
+	this->saved_answer = new char [strlen(answer)+1];
+	strcpy(this->saved_answer, answer);
 	return true;
 }
-*/
+
 // problem display
 bool Problems::display() const
 {
 	Topic::display();
 	std::cout << "Protoype: " << *prototype << std::endl;
 	std::cout << "Question: " << *question << std::endl;
+	if(saved_answer != NULL)
+		std::cout << "Answer: " << saved_answer << std::endl;
 	return true;
 }
 
 // class Future
 Future::Future()
 {
-//	answer = nullptr;
+	saved_answer = nullptr;
 	month = nullptr;
 	subject = nullptr;
 }
@@ -190,11 +204,13 @@ Future::Future()
 Future::Future(int temp_id, char * temp_topic, int temp_diff, char * temp_unique, char * temp_question): Topic(temp_id, temp_topic, temp_diff)
 {	
 	month = nullptr;
+	subject = nullptr;
 	if(month)
 		delete [] temp_unique;
 	this->month = new char [strlen(temp_unique)+1];
 	strcpy(this->month, temp_unique);
 	this->subject = new std::string(temp_question);
+	this->saved_answer = nullptr;
 }
 // future destructor
 Future::~Future()
@@ -203,8 +219,8 @@ Future::~Future()
 		delete[] month;
 	if(subject)
 		delete subject;
-//	if(answer)
-//		delete answer;
+	if(saved_answer)
+		delete saved_answer;
 }
 // future edit
 bool Future::edit(const char * temp_unique, const char * temp_question)
@@ -220,29 +236,31 @@ bool Future::edit(const char * temp_unique, const char * temp_question)
 	// delete old subject data
 	if(this->subject)
 	{
-		delete [] subject;
+		delete subject;
 	}
 	// create new question data
 	subject = new std::string(temp_question);
 	return true;
 }
 // future answer
-/*
+
 bool Future::answer(const char * answer)
 {
-	if(this->answer)
-		delete [] this->answer;
-	this->answer = new char [strlen(answer)+1];
-	strcpy(this->answer, answer);
+	if(this->saved_answer)
+		delete [] this->saved_answer;
+	this->saved_answer = new char [strlen(answer)+1];
+	strcpy(this->saved_answer, answer);
 	return true;
 }
-*/
+
 // future display
 bool Future::display() const
 {
 	Topic::display();
 	std::cout << "Month: " << month << std::endl;
 	std::cout << "Subject: " << *subject << std::endl;
+	if(saved_answer != NULL)
+		std::cout << "Answer: " << saved_answer << std::endl;
 	return true;
 }
 
@@ -351,7 +369,7 @@ bool Node::insert(int temp_id, char * temp_topic, int temp_diff, char * temp_uni
 		return true;
 	}	
 	// if temp_id 2 create future object
-	if(temp_id >= 9)
+	if(temp_id > 8)
 	{
 		Future * Test = new Future(temp_id, temp_topic, temp_diff, temp_unique, temp_question);
 		data = Test;

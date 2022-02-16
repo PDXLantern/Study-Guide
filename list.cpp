@@ -177,8 +177,8 @@ bool List::answer()
 
 Node * List::search(Node * current, int arr_number, const int match)
 {
-	if(match < 0 || match > 16) return nullptr;
-	if(arr_number == 3)
+	if(match < 0 || match > 13) return nullptr;
+	if(arr_number == 3 && current == nullptr)
 		return nullptr;
 	if(current == nullptr)
 	{
@@ -197,9 +197,9 @@ bool List::insert(int temp_id, char * temp_topic, int temp_diff, char * temp_uni
 	int i = 0;
 	if(temp_id >= 5 && temp_id <= 8)
 		i = 1;
-	if(temp_id >= 9)
+	if(temp_id > 8)
 		i = 2;
-//	std::cout << "Creating Nodes in Array: " << i  <<  std::endl;
+	//std::cout << "Creating Nodes in Array: " << i  <<  std::endl;
 	Node * Temp = nullptr;
 	Node * Prev = nullptr;
 	Temp = arr[i];

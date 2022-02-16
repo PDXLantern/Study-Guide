@@ -19,15 +19,18 @@ class Topic
 		// virtual base functions
 		virtual bool edit(const char * temp_unique, const char * temp_question) = 0;
 		virtual bool answer(const char * temp_answer) = 0;
+		virtual bool practice() = 0;
 		bool check_id(const int match);
 		// change id number
 		bool change_id(const int from_id);
 		// virtual display
 		virtual bool display() const;
 	protected:
-		// data members
+		// var for the topic id
 		int id;
+		// var for the derived type
 		char * topic;
+		// var for the difficulty
 		int difficulty;
 };
 
@@ -40,14 +43,21 @@ class Exam : public Topic
 		Exam(int temp_id, char * temp_topic, int temp_diff, char * temp_unique, char * temp_question);
 		// destructor
 		virtual ~Exam();
+		// virtual edit
 		virtual bool edit(const char * temp_unique, const char * temp_question);
+		// virtual answer
 		virtual bool answer(const char * temp_answer);
+		// virutal pratice
+		virtual bool practice();
 		// virtual display
 		virtual bool display() const;
 	protected:
+		// var for subject of question
 		char * type;
+		// var for the question
 		char * question;
-//		char * answer;
+		// var for the saved answer
+		char * saved_answer;
 };
 
 class Problems : public Topic
@@ -59,15 +69,20 @@ class Problems : public Topic
 		Problems(int temp_id, char * temp_topic, int temp_diff, char * temp_unique, char * temp_question);
 		// destructor
 		~Problems();
+		// virtual edit
 		virtual bool edit(const char * temp_unique, const char * temp_question);
+		// virtual answer
 		virtual bool answer(const char * temp_answer);
+		// virtual display
 		virtual bool display() const;
+		// virtual pratice
+		virtual bool practice();
 		// unqiue function
 		// bool easy();
 	protected:
 		std::string * prototype;
 		std::string * question;
-//		char * answer;
+		char * saved_answer;
 };
 
 class Future : public Topic
@@ -79,16 +94,23 @@ class Future : public Topic
 		Future(int temp_id, char * temp_topic, int temp_diff, char * temp_unique, char * temp_question);
 		// destructor
 		~Future();
-		// functions
+		// virtual edit
 		virtual bool edit(const char * temp_unique, const char * temp_question);
+		// virtual answer
 		virtual bool answer(const char * temp_answer);
+		// virtual display
 		virtual bool display() const;
+		// virtual pratice
+		virtual bool practice();
 		// unqiue function
 		bool change_month();
 	protected:
+		// var for the month
 		char * month;
+		// var of the future subject
 		std::string * subject;
-//		char * answer;
+		// var for any notes
+		char * saved_answer;
 };
 
 class Node 
